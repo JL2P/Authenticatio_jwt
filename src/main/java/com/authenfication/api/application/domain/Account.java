@@ -33,11 +33,15 @@ public class Account implements UserDetails {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(nullable = false)
+    @Column( length = 100)
     private String password;
 
     @Column(nullable = false)
     private String name;
+
+    //소셜로그인을 위한 컬럼 추가
+    @Column(length = 100)
+    private String provider;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

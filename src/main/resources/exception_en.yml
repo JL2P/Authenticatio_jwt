@@ -3,3 +3,7 @@ emailSigninFailed:
   code: "-1001"
   msg: "Your account does not exist or your email or password is incorrect."
 
+# exception_en.yml
+communicationError:
+  code: "-1004"
+  msg: "An error occurred during communication."

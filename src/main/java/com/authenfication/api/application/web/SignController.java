@@ -2,8 +2,11 @@ package com.authenfication.api.application.web;
 
 import com.authenfication.api.application.config.security.JwtTokenProvider;
 import com.authenfication.api.application.domain.Account;
+import com.authenfication.api.application.domain.service.logic.social.KakaoService;
 import com.authenfication.api.application.exception.CEmailSigninFailedException;
+import com.authenfication.api.application.exception.CUserNotFoundException;
 import com.authenfication.api.application.repository.AccountRepository;
+import com.authenfication.api.application.web.dto.KakaoProfile;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class SignController {
     private final AccountRepository accountRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final KakaoService kakaoService;
 
 
     @ApiOperation(value = "로그인", notes = "이메일 회원 로그인을 한다.")
@@ -55,6 +59,19 @@ public class SignController {
         return "200";
     }
 
+    @ApiOperation(value = "소셜 로그인", notes = "소셜 회원 로그인을 한다.")
+    @PostMapping(value = "/signin/{provider}")
+    public String signinByProvider(
+            @ApiParam(value = "서비스 제공자 provider", required = true, defaultValue = "kakao")
+            @PathVariable String provider,
+            @ApiParam(value = "소셜 access_token", required = true)
+            @RequestParam String accessToken) throws Throwable {
+
+        KakaoProfile profile = kakaoService.getKakaoProfile(accessToken);
+
+        Account account = accountRepository.findByAccountIdAndProvider(String.valueOf(profile.getId()), provider).orElseThrow(CUserNotFoundException::new);
+        return jwtTokenProvider.createToken(String.valueOf(account.getMsrl()), account.getRoles());
+    }
 
 
 }
