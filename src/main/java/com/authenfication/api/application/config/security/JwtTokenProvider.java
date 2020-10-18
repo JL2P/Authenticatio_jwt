@@ -25,6 +25,7 @@ import java.util.List;
 @Component
 public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
 
+    //
     @Value("spring.jwt.secret")
     private String secretKey;
 
@@ -36,6 +37,12 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
+    //@postConstruct
+    //
+    //- 객체의 초기화 부분
+    //- 객체가 생성된 후 별도의 초기화 작업을 위해 실행하는 메소드를 선언한다.
+    //- @PostConstruct 어노테이션을 설정해놓은 init 메소드는 WAS가 띄워질 때 실행된다.
+
 
     // Jwt 토큰 생성
     public String createToken(String userPk, List<String> roles) {

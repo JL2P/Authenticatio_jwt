@@ -12,7 +12,7 @@ spring:
     hibernate:
       ddl-auto: create
   messages:
-    basename: i18n/exception
+    basename: exception/exception
     encoding: UTF-8
   jwt:
     secret: govlepel@$&
